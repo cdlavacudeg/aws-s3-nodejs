@@ -1,4 +1,4 @@
-const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client, GetObjectCommand, PutObjectCommand } = require('@aws-sdk/client-s3');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 
@@ -39,6 +39,26 @@ class AwsS3 {
       Key: key,
     };
     const command = new GetObjectCommand(params);
+    const response = await s3Client.send(command);
+    return response;
+  }
+
+  static async uploadFromBase64(dataString, filePath) {
+    const matches = dataString.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
+    if (!matches || matches?.length !== 3) {
+      throw new Error('Invalid base64');
+    }
+    const type = matches[1];
+    const base64Data = matches[2];
+    const buffer = Buffer.from(base64Data, 'base64');
+
+    const command = new PutObjectCommand({
+      Bucket: config.s3.bucket,
+      Key: filePath,
+      Body: buffer,
+      ContentType: type,
+    });
+
     const response = await s3Client.send(command);
     return response;
   }

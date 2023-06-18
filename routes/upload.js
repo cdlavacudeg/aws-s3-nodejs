@@ -9,4 +9,12 @@ router.post('/', AwsS3.uploadFromForm('image', Date.now().toString() + 'prueba-2
   res.send('File uploaded successfully');
 });
 
+router.post('/base64', async (req, res) => {
+  const { base64, filePath } = req.body;
+
+  await AwsS3.uploadFromBase64(base64, filePath);
+
+  res.send('File uploaded successfully');
+});
+
 module.exports = router;
