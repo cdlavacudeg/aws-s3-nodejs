@@ -6,10 +6,10 @@ const config = require('../config');
 
 const s3Client = new S3Client({
   region: config.s3.region,
-  credentials: {
-    accessKeyId: config.aws.accessKeyId,
-    secretAccessKey: config.aws.secretAccessKey,
-  },
+  // credentials: {
+  //   accessKeyId: config.aws.accessKeyId,
+  //   secretAccessKey: config.aws.secretAccessKey,
+  // },
 });
 
 class AwsS3 {
